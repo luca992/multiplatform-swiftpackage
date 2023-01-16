@@ -139,7 +139,7 @@ internal fun Project.registerCreateXCFrameworkTask() = tasks.register("createXCF
         configuration.appleTargets.mapNotNull { it.getFramework(configuration.buildConfiguration) }.toMutableList()
 
     dependsOn(outputFrameworks.map { it.linkTask.name })
-    dependsOn("createUniversalMacosFramework")
+    dependsOn("createUniversalMacosSimulatorFramework")
     dependsOn("createUniversalIosSimulatorFramework")
     dependsOn("createUniversalWatchosSimulatorFramework")
     dependsOn("createUniversalTvosSimulatorFramework")
