@@ -1,13 +1,22 @@
 buildscript {
     repositories {
         mavenCentral()
+        google()
     }
     dependencies {
-        classpath("org.jetbrains.kotlinx:binary-compatibility-validator:0.12.1")
+        classpath("org.jetbrains.kotlinx:binary-compatibility-validator:0.13.1")
     }
 }
 
 apply(plugin = "binary-compatibility-validator")
+
+group = "com.darek"
+
+val GIT_USER: String? by project
+val GIT_TOKEN: String? by project
+val VERSION_NAME: String? by project
+
+version = VERSION_NAME ?: "0.1"
 
 plugins {
     `kotlin-dsl`
@@ -16,24 +25,22 @@ plugins {
     signing
 }
 
-version = "2.1.1"
-
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compileOnly(kotlin("gradle-plugin", "1.8.0"))
+    compileOnly(kotlin("gradle-plugin", "1.8.20"))
     testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
     testImplementation("io.kotest:kotest-assertions-core:5.5.4")
     testImplementation("io.kotest:kotest-property:5.5.4")
     testImplementation("io.mockk:mockk:1.13.2")
-    testImplementation(kotlin("gradle-plugin", "1.8.0"))
+    testImplementation(kotlin("gradle-plugin", "1.8.20"))
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     withJavadocJar()
     withSourcesJar()
@@ -56,7 +63,7 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
 gradlePlugin {
     plugins {
         create("pluginMaven") {
-            id = "io.github.luca992.multiplatform-swiftpackage"
+            id = "com.dariusz.multiplatform-swiftpackage"
             implementationClass = "com.chromaticnoise.multiplatformswiftpackage.MultiplatformSwiftPackagePlugin"
         }
     }
@@ -66,12 +73,12 @@ publishing {
     publications {
         create<MavenPublication>("pluginMaven") {
             pom {
-                groupId = "io.github.luca992.multiplatform-swiftpackage"
-                artifactId = "io.github.luca992.multiplatform-swiftpackage.gradle.plugin"
+                groupId = "com.dariusz.multiplatform-swiftpackage"
+                artifactId = "com.dariusz.multiplatform-swiftpackage.gradle.plugin"
 
                 name.set("Multiplatform Swift Package")
                 description.set("Gradle plugin to generate a Swift.package file and XCFramework to distribute a Kotlin Multiplatform iOS library")
-                url.set(" https://github.com/luca992/multiplatform-swiftpackage")
+                url.set("https://github.com/dariuszszlag/multiplatform-swiftpackage")
 
                 licenses {
                     license {
@@ -84,24 +91,17 @@ publishing {
                         name.set("Georg Dresler")
                     }
                 }
-                scm {
-                    connection.set("scm:git: https://github.com/luca992/multiplatform-swiftpackage.git")
-                    developerConnection.set("scm:git:ssh://github.com/luca992/multiplatform-swiftpackage.git")
-                    url.set(" https://github.com/luca992/multiplatform-swiftpackage")
-                }
             }
         }
     }
 
     repositories {
         maven {
-            val releasesUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            val snapshotsUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-            name = "mavencentral"
-            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsUrl else releasesUrl)
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/dariuszszlag/multiplatform-swiftpackage")
             credentials {
-                username = System.getenv("SONATYPE_NEXUS_USERNAME") ?: properties["SONATYPE_NEXUS_USERNAME"].toString()
-                password = System.getenv("SONATYPE_NEXUS_PASSWORD") ?: properties["SONATYPE_NEXUS_PASSWORD"].toString()
+                username = GIT_USER
+                password = GIT_TOKEN
             }
         }
     }
