@@ -62,7 +62,7 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
 
 gradlePlugin {
     plugins {
-        create("pluginMaven") {
+        create("multiplatformSwiftPackagePlugin") {
             id = "com.dariusz.multiplatform-swiftpackage"
             implementationClass = "com.chromaticnoise.multiplatformswiftpackage.MultiplatformSwiftPackagePlugin"
         }
@@ -71,7 +71,7 @@ gradlePlugin {
 
 publishing {
     publications {
-        create<MavenPublication>("pluginMaven") {
+        create<MavenPublication>("multiplatformSwiftPackagePlugin") {
             pom {
                 groupId = "com.dariusz.multiplatform-swiftpackage"
                 artifactId = "com.dariusz.multiplatform-swiftpackage.gradle.plugin"
@@ -84,11 +84,6 @@ publishing {
                     license {
                         name.set("Apache License, Version 2.0")
                         url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        name.set("Georg Dresler")
                     }
                 }
             }
@@ -108,7 +103,7 @@ publishing {
 }
 
 signing {
-    sign(publishing.publications["pluginMaven"])
+    sign(publishing.publications["multiplatformSwiftPackagePlugin"])
 }
 
 tasks.javadoc {
