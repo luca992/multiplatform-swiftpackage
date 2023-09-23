@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.*
+
 buildscript {
     repositories {
         mavenCentral()
@@ -16,7 +19,7 @@ plugins {
     signing
 }
 
-version = "2.1.4"
+version = "2.2.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -98,6 +101,12 @@ publishing {
     }
 
     repositories {
+        val file = project.file("local.properties")
+        val properties = Properties().apply {
+            if (file.exists()) {
+                load(FileInputStream(file))
+            }
+        }
         maven {
             val releasesUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
             val snapshotsUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
