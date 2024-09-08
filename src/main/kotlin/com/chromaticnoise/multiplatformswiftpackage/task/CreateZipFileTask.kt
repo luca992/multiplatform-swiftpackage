@@ -16,7 +16,7 @@ internal fun Project.registerCreateZipFileTask() {
         archiveFileName.set(configuration.zipFileName.nameWithExtension)
         destinationDirectory.set(outputDirectory)
         from(outputDirectory) {
-            include("**/*.xcframework/")
+            include("${configuration.packageName.value}.xcframework/")
         }
     }
 }
