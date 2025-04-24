@@ -6,15 +6,15 @@
 
 [versions]
 
-kotlin = "2.0.0"
+kotlin = "2.1.20"
 
 kotest = "5.9.1"
 
-mockk = "1.13.11"
+mockk = "1.14.0"
 
 [libraries]
 
-binary-compatibility-validator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.14.0"
+binary-compatibility-validator = "org.jetbrains.kotlinx:binary-compatibility-validator:0.17.0"
 
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
