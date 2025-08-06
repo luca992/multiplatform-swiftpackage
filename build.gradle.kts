@@ -5,7 +5,7 @@ plugins {
     signing
 }
 
-version = "2.2.4"
+version = "2.3.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -84,8 +84,8 @@ publishing {
 
     repositories {
         maven {
-            val releasesUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            val snapshotsUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            val releasesUrl = "https://central.sonatype.com/api/v1/publisher/upload"
+            val snapshotsUrl = "https://central.sonatype.com/repository/maven-snapshots/"
             name = "mavencentral"
             url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsUrl else releasesUrl)
             credentials {
