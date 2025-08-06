@@ -8,7 +8,7 @@ plugins {
     signing
 }
 
-version = "2.3.0-SNAPSHOT"
+version = "2.3.0"
 
 repositories {
     mavenCentral()

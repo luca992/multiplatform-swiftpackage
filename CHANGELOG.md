@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 tbd
 
+## [2.3.0]
+### Fixed
+- Support Gradle 9
+[#24](https://github.com/luca992/multiplatform-swiftpackage/issues/24)
+
 ## [2.0.3]
 ### Added
 - The plugin DSL is now compatible with Groovy
