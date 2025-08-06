@@ -1,9 +1,9 @@
 package com.chromaticnoise.multiplatformswiftpackage.task
 
 import com.chromaticnoise.multiplatformswiftpackage.domain.*
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.register
-import org.gradle.process.ExecOperations
 import org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask
 import java.io.File
 
@@ -176,10 +176,9 @@ internal fun Project.registerCreateXCFrameworkTask() = tasks.register("createXCF
     )
 
     doLast {
-        val execOps = project.objects.newInstance(ExecOperations::class.java)
-        execOps.exec {
-            executable = "xcodebuild"
-            this.args(mutableListOf<String>().apply {
+        val processBuilder = ProcessBuilder().apply {
+            command(mutableListOf<String>().apply {
+                add("xcodebuild")
                 add("-create-xcframework")
                 add("-output")
                 add(xcFrameworkDestination.path)
@@ -193,6 +192,12 @@ internal fun Project.registerCreateXCFrameworkTask() = tasks.register("createXCF
                     }
                 }
             })
+        }
+
+        val process = processBuilder.start()
+        val exitCode = process.waitFor()
+        if (exitCode != 0) {
+            throw GradleException("xcodebuild command failed with exit code: $exitCode")
         }
     }
 

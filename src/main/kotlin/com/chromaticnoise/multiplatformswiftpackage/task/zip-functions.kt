@@ -2,25 +2,24 @@ package com.chromaticnoise.multiplatformswiftpackage.task
 
 import com.chromaticnoise.multiplatformswiftpackage.domain.OutputDirectory
 import com.chromaticnoise.multiplatformswiftpackage.domain.ZipFileName
-import org.gradle.api.Project
-import org.gradle.process.ExecOperations
-import java.io.ByteArrayOutputStream
 import java.io.File
 
-internal fun zipFileChecksum(project: Project, outputDirectory: OutputDirectory, zipFileName: ZipFileName): String {
-    val execOps = project.objects.newInstance(ExecOperations::class.java)
+internal fun zipFileChecksum(outputDirectory: OutputDirectory, zipFileName: ZipFileName): String {
     val outputPath = outputDirectory.value
     return File(outputPath, zipFileName.nameWithExtension)
         .takeIf { it.exists() }
         ?.let { zipFile ->
-            ByteArrayOutputStream().use { os ->
-                execOps.exec {
-                    workingDir = outputPath
-                    executable = "swift"
-                    args = listOf("package", "compute-checksum", zipFile.name)
-                    standardOutput = os
-                }
-                os.toString()
+            val processBuilder = ProcessBuilder(
+                "swift", "package", "compute-checksum", zipFile.name
+            ).apply {
+                directory(outputPath)
             }
+
+            val process = processBuilder.start()
+            val output = process.inputStream.bufferedReader().readText().trim()
+            val exitCode = process.waitFor()
+
+            if (exitCode == 0) output else ""
         } ?: ""
+
 }
