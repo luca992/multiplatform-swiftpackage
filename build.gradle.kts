@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
@@ -103,5 +106,11 @@ signing {
 tasks.javadoc {
     if (JavaVersion.current().isJava9Compatible) {
         (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    }
+}
+
+allprojects {
+    tasks.withType<KotlinCompile> {
+        compilerOptions.jvmTarget = JvmTarget.JVM_1_8
     }
 }
