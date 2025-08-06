@@ -7,7 +7,6 @@ import com.chromaticnoise.multiplatformswiftpackage.domain.PluginConfiguration.P
 import com.chromaticnoise.multiplatformswiftpackage.domain.TargetName
 import com.chromaticnoise.multiplatformswiftpackage.domain.TargetPlatform
 import groovy.lang.Closure
-import org.gradle.util.ConfigureUtil
 
 /**
  * DSL to create instances of [TargetPlatform].
@@ -32,7 +31,11 @@ public class TargetPlatformDsl {
     }
 
     public fun iOS(version: Closure<PlatformVersionDsl>) {
-        iOS { ConfigureUtil.configure(version, this) }
+        iOS {
+            version.delegate = this
+            version.resolveStrategy = Closure.DELEGATE_FIRST
+            version.call()
+        }
     }
 
     /**
@@ -54,7 +57,11 @@ public class TargetPlatformDsl {
     }
 
     public fun watchOS(version: Closure<PlatformVersionDsl>) {
-        watchOS { ConfigureUtil.configure(version, this) }
+        watchOS {
+            version.delegate = this
+            version.resolveStrategy = Closure.DELEGATE_FIRST
+            version.call()
+        }
     }
 
     /**
@@ -74,7 +81,11 @@ public class TargetPlatformDsl {
     }
 
     public fun tvOS(version: Closure<PlatformVersionDsl>) {
-        tvOS { ConfigureUtil.configure(version, this) }
+        tvOS {
+            version.delegate = this
+            version.resolveStrategy = Closure.DELEGATE_FIRST
+            version.call()
+        }
     }
 
     /**
@@ -93,7 +104,11 @@ public class TargetPlatformDsl {
     }
 
     public fun macOS(version: Closure<PlatformVersionDsl>) {
-        macOS { ConfigureUtil.configure(version, this) }
+        macOS {
+            version.delegate = this
+            version.resolveStrategy = Closure.DELEGATE_FIRST
+            version.call()
+        }
     }
 
     /**
@@ -108,10 +123,17 @@ public class TargetPlatformDsl {
     }
 
     public fun targets(names: Collection<String>, version: Closure<PlatformVersionDsl>) {
-        targetsInternal(names.toTargetNames()) { ConfigureUtil.configure(version, this) }
+        targetsInternal(names.toTargetNames()) {
+            version.delegate = this
+            version.resolveStrategy = Closure.DELEGATE_FIRST
+            version.call()
+        }
     }
 
-    private fun targetsInternal(names: Collection<Either<PluginConfigurationError, TargetName>>, configure: PlatformVersionDsl.() -> Unit) {
+    private fun targetsInternal(
+        names: Collection<Either<PluginConfigurationError, TargetName>>,
+        configure: PlatformVersionDsl.() -> Unit
+    ) {
         if (names.isEmpty()) return
         val platformVersion = PlatformVersionDsl().apply(configure).version ?: return
 

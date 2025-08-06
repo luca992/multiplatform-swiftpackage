@@ -7,7 +7,6 @@ import com.chromaticnoise.multiplatformswiftpackage.dsl.DistributionModeDSL
 import com.chromaticnoise.multiplatformswiftpackage.dsl.TargetPlatformDsl
 import groovy.lang.Closure
 import org.gradle.api.Project
-import org.gradle.util.ConfigureUtil
 import java.io.File
 
 public open class SwiftPackageExtension(internal val project: Project) {
@@ -60,7 +59,7 @@ public open class SwiftPackageExtension(internal val project: Project) {
     }
 
     public fun buildConfiguration(configure: Closure<BuildConfigurationDSL>) {
-        buildConfiguration { ConfigureUtil.configure(configure, this) }
+        buildConfiguration { project.configure(this, configure) }
     }
 
     /**
@@ -74,7 +73,7 @@ public open class SwiftPackageExtension(internal val project: Project) {
     }
 
     public fun distributionMode(configure: Closure<DistributionModeDSL>) {
-        distributionMode { ConfigureUtil.configure(configure, this) }
+        buildConfiguration { project.configure(this, configure) }
     }
 
     /**
@@ -88,7 +87,7 @@ public open class SwiftPackageExtension(internal val project: Project) {
     }
 
     public fun targetPlatforms(configure: Closure<TargetPlatformDsl>) {
-        targetPlatforms { ConfigureUtil.configure(configure, this) }
+        buildConfiguration { project.configure(this, configure) }
     }
 
     /**

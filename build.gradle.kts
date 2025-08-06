@@ -1,14 +1,3 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath(libs.binary.compatibility.validator)
-    }
-}
-
-apply(plugin = "binary-compatibility-validator")
-
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
@@ -20,10 +9,6 @@ version = "2.2.4"
 
 repositories {
     mavenCentral()
-}
-
-kotlin {
-    jvmToolchain(8)
 }
 
 dependencies {
