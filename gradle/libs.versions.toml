@@ -2,9 +2,12 @@
 
 [plugins]
 
+com-vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech-publish" }
 
 
 [versions]
+
+vanniktech-publish = "0.33.0"
 
 kotlin = "2.2.0"
 

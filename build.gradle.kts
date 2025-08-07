@@ -4,8 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-    `maven-publish`
-    signing
+    alias(libs.plugins.com.vanniktech.maven.publish)
 }
 
 version = "2.3.0"
@@ -26,9 +25,6 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-
-    withJavadocJar()
-    withSourcesJar()
 }
 
 tasks.withType<Test> {
@@ -54,53 +50,44 @@ gradlePlugin {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("pluginMaven") {
-            pom {
+
+afterEvaluate {
+    publishing {
+        publications {
+            named<MavenPublication>("pluginMaven") {
                 groupId = "io.github.luca992.multiplatform-swiftpackage"
                 artifactId = "io.github.luca992.multiplatform-swiftpackage.gradle.plugin"
-
-                name.set("Multiplatform Swift Package")
-                description.set("Gradle plugin to generate a Swift.package file and XCFramework to distribute a Kotlin Multiplatform iOS library")
-                url.set(" https://github.com/luca992/multiplatform-swiftpackage")
-
-                licenses {
-                    license {
-                        name.set("Apache License, Version 2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        name.set("Georg Dresler")
-                    }
-                }
-                scm {
-                    connection.set("scm:git: https://github.com/luca992/multiplatform-swiftpackage.git")
-                    developerConnection.set("scm:git:ssh://github.com/luca992/multiplatform-swiftpackage.git")
-                    url.set(" https://github.com/luca992/multiplatform-swiftpackage")
-                }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            val releasesUrl = "https://central.sonatype.com/api/v1/publisher/upload"
-            val snapshotsUrl = "https://central.sonatype.com/repository/maven-snapshots/"
-            name = "mavencentral"
-            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsUrl else releasesUrl)
-            credentials {
-                username = System.getenv("ossrh.username") ?: properties["ossrh.username"].toString()
-                password = System.getenv("ossrh.password") ?: properties["ossrh.password"].toString()
             }
         }
     }
 }
 
-signing {
-    sign(publishing.publications["pluginMaven"])
+mavenPublishing {
+    pom {
+        name.set("Multiplatform Swift Package")
+        description.set("Gradle plugin to generate a Swift.package file and XCFramework to distribute a Kotlin Multiplatform iOS library")
+        url.set("https://github.com/luca992/multiplatform-swiftpackage")
+
+        licenses {
+            license {
+                name.set("Apache License, Version 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+            }
+        }
+        developers {
+            developer {
+                name.set("Georg Dresler")
+            }
+            developer {
+                name.set("Luca Spinazzola")
+            }
+        }
+        scm {
+            connection.set("scm:git:https://github.com/luca992/multiplatform-swiftpackage.git")
+            developerConnection.set("scm:git:ssh://github.com/luca992/multiplatform-swiftpackage.git")
+            url.set("https://github.com/luca992/multiplatform-swiftpackage")
+        }
+    }
 }
 
 tasks.javadoc {
